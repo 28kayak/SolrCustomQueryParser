@@ -13,4 +13,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.apache.solr/solr-core
     compile group: 'org.apache.solr', name: 'solr-core', version: '8.6.0'
+    // https://mvnrepository.com/artifact/org.apache.solr/solr-test-framework
+    testCompile group: 'org.apache.solr', name: 'solr-test-framework', version: '8.6.0'
 }

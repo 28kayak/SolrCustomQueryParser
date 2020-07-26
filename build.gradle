@@ -2,17 +2,36 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'org.sample.kaya'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://maven.restlet.com"
+    }
 }
 
+configurations {
+    parser
+}
+uri 'src/main/java/sample'
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // lib フォルダ直下の jar を全て指定
+    //compile fileTree(dir: 'libs', include: '*.jar')
+    // https://mvnrepository.com/artifact/org.restlet.jee/org.restlet.ext.servlet
+    compile group: 'org.restlet.jee', name: 'org.restlet.ext.servlet', version: '2.4.0'
+    // https://mvnrepository.com/artifact/org.restlet.jee/org.restlet
+    compile group: 'org.restlet.jee', name: 'org.restlet', version: '2.4.0'
+
+    // https://mvnrepository.com/artifact/junit/junit
+    testCompile(group: 'junit', name: 'junit', version: '4.13')
     // https://mvnrepository.com/artifact/org.apache.solr/solr-core
-    compile group: 'org.apache.solr', name: 'solr-core', version: '8.6.0'
+    implementation(group: 'org.apache.solr', name: 'solr-core', version: '8.5.2')
     // https://mvnrepository.com/artifact/org.apache.solr/solr-test-framework
-    testCompile group: 'org.apache.solr', name: 'solr-test-framework', version: '8.6.0'
+    implementation(group: 'org.apache.solr', name: 'solr-test-framework', version: '8.5.2')
+}
+test{
+    tasks.withType(Test) { systemProperty 'java.security.egd', 'file:/dev/./urandom' }
 }

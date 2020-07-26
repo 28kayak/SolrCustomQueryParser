@@ -35,3 +35,7 @@ dependencies {
 test{
     tasks.withType(Test) { systemProperty 'java.security.egd', 'file:/dev/./urandom' }
 }
+jar {
+    archiveBaseName = 'solr-custom-query-parser'
+    archiveVersion =  '0.1.0'
+}

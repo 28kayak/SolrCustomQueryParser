@@ -1,4 +1,4 @@
-package parser;
+package sample;
 
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.request.SolrQueryRequest;

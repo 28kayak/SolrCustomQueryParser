@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+     http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<schema name="default-config" version="1.6">
+    <luceneMatchVersion>8.6.0</luceneMatchVersion>
+    <uniqueKey>id</uniqueKey>
+    <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
+    <field name="_version_" type="plong" indexed="true" stored="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+    <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true"/>
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
+    <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
+    <fieldType name="pdates" class="solr.DatePointField" docValues="true" multiValued="true"/>
+    <fieldType name="pdoubles" class="solr.DoublePointField" docValues="true" multiValued="true"/>
+    <field name="t_title" type="text_general" indexed="true" stored="true" />
+    <field name="text" type="text_general" indexed="true" stored="true" />
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <!--<filter class="solr.StopFilterFactory" words="stopwords.txt" ignoreCase="true"/>-->
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <!--<filter class="solr.StopFilterFactory" words="stopwords.txt" ignoreCase="true"/>-->
+            <!--<filter class="solr.SynonymGraphFilterFactory" expand="true" ignoreCase="true" synonyms="synonyms.txt"/>-->
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="text_ja" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="false">
+        <analyzer>
+            <tokenizer class="solr.JapaneseTokenizerFactory" mode="search"/>
+            <!--<tokenizer class="solr.JapaneseTokenizerFactory" mode="search" userDictionary="lang/userdict_ja.txt"/>-->
+            <!-- Reduces inflected verbs and adjectives to their base/dictionary forms (辞書形) -->
+            <filter class="solr.JapaneseBaseFormFilterFactory"/>
+            <!-- Removes tokens with certain part-of-speech tags -->
+            <!--<filter class="solr.JapanesePartOfSpeechStopFilterFactory" tags="lang/stoptags_ja.txt" />-->
+            <!-- Normalizes full-width romaji to half-width and half-width kana to full-width (Unicode NFKC subset) -->
+            <filter class="solr.CJKWidthFilterFactory"/>
+            <!-- Removes common tokens typically not useful for search, but have a negative effect on ranking -->
+            <!--<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_ja.txt" />-->
+            <!-- Normalizes common katakana spelling variations by removing any last long sound character (U+30FC) -->
+            <filter class="solr.JapaneseKatakanaStemFilterFactory" minimumLength="4"/>
+            <!-- Lower-cases romaji characters -->
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+    <!--
+       A custom Similarity or SimilarityFactory may be specified here, but
+       the default is fine for most applications.
+       For more info: http://lucene.apache.org/solr/guide/other-schema-elements.html#OtherSchemaElements-Similarity
+    -->
+    <!--
+     <similarity class="com.example.solr.CustomSimilarityFactory">
+       <str name="paramkey">param value</str>
+     </similarity>
+    -->
+</schema>
